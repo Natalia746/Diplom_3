@@ -1,0 +1,7 @@
+
+
+BASE_URL = 'https://stellarburgers.nomoreparties.site/'
+LOGIN_PAGE = 'login'
+LOGIN_URL = "https://stellarburgers.nomoreparties.site/login"
+FORGOT_PASSWORD_URL = "https://stellarburgers.nomoreparties.site/forgot-password"
+RESET_PASSWORD_PAGE = "https://stellarburgers.nomoreparties.site/reset-password"
