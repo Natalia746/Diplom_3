@@ -11,7 +11,9 @@ class RecoverLocators:
     PASSWORD_LABEL = (By.XPATH, "//label[contains(@class, 'input__placeholder') and text()='Пароль']")
     ILLUMINATED_PASSWORD_FIELD = (By.CSS_SELECTOR, "div.input_status_active")
     ILLUMINATED_PASS_FIELD=(By.XPATH, "//label[contains(@class, 'input__placeholder') and "
-"contains(@class, 'input__placeholder-focused') and "
-               "text()='Пароль']")
+                                      "contains(@class, 'input__placeholder-focused') and "
+                                        "text()='Пароль']")
+
+
 
 

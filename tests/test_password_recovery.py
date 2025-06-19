@@ -20,7 +20,7 @@ class TestPasswordRecoveryUI:
         main_page.current_url_should_be(BASE_URL)
         main_page.click_element(MainPageLocators.ACCOUNT_BUTTON)
 
-        login_page = LoginPage(driver, timeout=3)
+        login_page = LoginPage(driver, timeout=5)
 
         login_page.should_be_restore_link()
         login_page.click_restore_password_link()
@@ -48,33 +48,36 @@ class TestPasswordRecoveryUI:
         password_recovery_page.wait_for_url_to_be(RESET_PASSWORD_PAGE)
 
     @allure.title("Проверка подсветки поля пароля при клике на иконку глаза")
-    def test_password_field_highlight_on_eye_click(self, driver):
+    @pytest.mark.parametrize("password_input", [
+        pytest.param("152qwe", id="with_password"),
+        pytest.param("", id="empty_password")
+    ])
+    def test_password_field_highlight_on_eye_click(self, driver, password_input):
         registered_email = REGISTERED_EMAIL
 
         main_page = MainPage(driver, timeout=15)
-
         main_page.wait_for_element_clickable(MainPageLocators.ACCOUNT_BUTTON)
         main_page.click_element(MainPageLocators.ACCOUNT_BUTTON)
 
         login_page = LoginPage(driver, timeout=15)
-
         login_page.wait_for_overlay_to_disappear(RecoverLocators.OVERLAY_LOCATOR)
         login_page.click_restore_password_link()
 
         password_recovery_page = PasswordRecovery(driver, timeout=5)
-
         password_recovery_page.current_url_should_be(FORGOT_PASSWORD_URL)
         password_recovery_page.input_text(RecoverLocators.EMAIL_INPUT, registered_email)
         password_recovery_page.wait_for_element_clickable(RecoverLocators.RECOVER_BUTTON)
         password_recovery_page.click_element(RecoverLocators.RECOVER_BUTTON)
 
         reset_page = ResetPasswordPage(driver, timeout=15)
-
         reset_page.wait_for_url_to_be(RESET_PASSWORD_PAGE)
+        # Вводим пароль (или оставляем поле пустым) в зависимости от параметра
+        if password_input:
+            reset_page.input_text(RecoverLocators.PASSWORD_INPUT, password_input)
+
         reset_page.check_password_highlight(should_be_highlighted=False)
         reset_page.click_show_password()
         reset_page.wait_for_password_highlight()
-
 
 
 

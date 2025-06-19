@@ -56,7 +56,7 @@ class BasePage:
         assert element.is_displayed(), f"Элемент {locator} не отображается"
 
     @allure.step("Дождаться кликабельности элемента: {locator}")
-    def wait_for_element_clickable(self, locator, timeout=10):
+    def wait_for_element_clickable(self, locator, timeout=15):
         return WebDriverWait(self.driver, timeout).until(
         EC.element_to_be_clickable(locator),
         message=f"Element {locator} not clickable"
@@ -85,7 +85,7 @@ class BasePage:
         element.send_keys(text)
 
     @allure.step("Дождаться изменения URL")
-    def wait_for_url_change(self, original_url, timeout=10):
+    def wait_for_url_change(self, original_url, timeout=30):
         WebDriverWait(self.driver, timeout).until(
             lambda driver: driver.current_url != original_url
         )
@@ -97,7 +97,7 @@ class BasePage:
         )
 
     @allure.step("Дождаться видимости элемента: {locator}")
-    def wait_for_element_visible(self, locator, timeout=15):
+    def wait_for_element_visible(self, locator, timeout=20):
         return WebDriverWait(self.driver, timeout).until(
             EC.visibility_of_element_located(locator),
             message=f"Element {locator} not visible after {timeout} sec"
@@ -122,23 +122,4 @@ class BasePage:
         else:
             assert "input__placeholder-focused" not in classes, "Поле не должно быть подсвечено"
 
-    @allure.step("Клик по кнопке показать/скрыть пароль")
-    def click_show_password(self):
-        self.wait_for_overlay_to_disappear(RecoverLocators.OVERLAY_LOCATOR, timeout=30)
 
-        # Для Firefox - специальная обработка с кликом через JavaScript
-        if self.driver.name == "firefox":
-            # Находим элемент кнопки
-            button = self.wait_for_element_clickable(RecoverLocators.SHOW_PASSWORD_BUTTON, timeout=30)
-
-            # Прокручиваем к элементу
-            self.driver.execute_script(
-                "arguments[0].scrollIntoView({block: 'center', behavior: 'instant'});",
-                button
-            )
-
-            # Клик через JavaScript (обход перекрытия)
-            self.driver.execute_script("arguments[0].click();", button)
-        else:
-            # Стандартная обработка для других браузеров
-            self.click_element(RecoverLocators.SHOW_PASSWORD_BUTTON)
