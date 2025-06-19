@@ -31,3 +31,9 @@ class MainPage(BasePage):
             # Стандартная обработка для других браузеров
             self.click_element(MainPageLocators.ACCOUNT_BUTTON)
 
+    @allure.step("Открыть и проверить модальное окно ингредиента")
+    def open_and_check_ingredient_modal(self):
+        self.click_element(MainPageLocators.INGREDIENT_BUN)
+        self.element_should_be_present(MainPageLocators.INGREDIENT_DETAILS_MODAL)
+        self.element_should_be_present(MainPageLocators.INGREDIENT_MODAL_NAME)
+

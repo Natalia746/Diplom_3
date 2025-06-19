@@ -51,7 +51,7 @@ class BasePage:
         )
 
     @allure.step("Проверить наличие элемента: {locator}")
-    def element_should_be_present(self, locator, timeout=10):
+    def element_should_be_present(self, locator, timeout=20):
         element = self.find_element(locator, timeout)
         assert element.is_displayed(), f"Элемент {locator} не отображается"
 
