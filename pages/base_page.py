@@ -122,4 +122,11 @@ class BasePage:
         else:
             assert "input__placeholder-focused" not in classes, "Поле не должно быть подсвечено"
 
+    @allure.step("Проверить наличие класса у элемента")
+    def element_should_have_class(self, locator, expected_class, timeout=30, message=None):
+        element = self.wait_for_element_visible(locator, timeout)
+        actual_classes = element.get_attribute("class").split()
+        error_message = message or f"Элемент {locator} не содержит класс {expected_class}. Актуальные классы: {actual_classes}"
+        assert expected_class in actual_classes, error_message
+
 

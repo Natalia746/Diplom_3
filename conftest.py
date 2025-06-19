@@ -2,6 +2,7 @@ import pytest
 from selenium import webdriver
 from url import *
 import pytest
+import allure
 from pages.main_page import MainPage
 from pages.login_page import LoginPage
 from data import REGISTERED_EMAIL, REGISTERED_PASSWORD
@@ -41,3 +42,19 @@ def driver(request):
     yield driver
     driver.quit()
 
+
+@pytest.fixture
+def go_to_account_page(driver):
+    """Фикстура для перехода на страницу аккаунта"""
+    main_page = MainPage(driver)
+
+    with allure.step("Ожидание кликабельности кнопки аккаунта"):
+        main_page.wait_for_element_clickable(MainPageLocators.ACCOUNT_BUTTON)
+
+    with allure.step("Проверка текущего URL"):
+        main_page.current_url_should_be(BASE_URL)
+
+    with allure.step("Клик по кнопке аккаунта"):
+        main_page.click_element(MainPageLocators.ACCOUNT_BUTTON)
+
+    yield driver  # Возвращаем драйвер для использования в тесте
