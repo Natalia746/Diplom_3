@@ -5,6 +5,7 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from url import *
 from selenium.common.exceptions import TimeoutException
 from locators.recover_password_locators import RecoverLocators
+from selenium.webdriver.common.action_chains import ActionChains
 
 
 class BasePage:
@@ -129,4 +130,28 @@ class BasePage:
         error_message = message or f"Элемент {locator} не содержит класс {expected_class}. Актуальные классы: {actual_classes}"
         assert expected_class in actual_classes, error_message
 
+    @allure.step("Дождаться исчезновения элемента: {locator}")
+    def wait_for_element_invisible(self, locator, timeout=20):
+        WebDriverWait(self.driver, timeout).until(
+            EC.invisibility_of_element_located(locator),
+            message=f"Element {locator} is still visible after {timeout} sec"
+        )
+
+    @allure.step("Дождаться текста '{text}' в элементе: {locator}")
+    def wait_for_text_in_element(self, locator, text, timeout=10):
+        WebDriverWait(self.driver, timeout).until(
+            EC.text_to_be_present_in_element(locator, text),
+            message=f"Текст '{text}' не появился в элементе {locator} за {timeout} секунд"
+        )
+
+    @allure.step("Перетащить элемент в корзину")
+    def drag_and_drop_element(self, source_locator, target_locator):
+        source = self.wait_for_element_clickable(source_locator)
+        target = self.wait_for_element_visible(target_locator)
+        ActionChains(self.driver).drag_and_drop(source, target).perform()
+
+    @allure.step("Получить текст элемента")
+    def get_element_text(self, locator, timeout=10):
+        element = self.wait_for_element_visible(locator, timeout)
+        return element.text
 

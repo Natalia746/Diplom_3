@@ -57,4 +57,4 @@ def go_to_account_page(driver):
     with allure.step("Клик по кнопке аккаунта"):
         main_page.click_element(MainPageLocators.ACCOUNT_BUTTON)
 
-    yield driver  # Возвращаем драйвер для использования в тесте
+    yield driver

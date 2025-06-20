@@ -11,3 +11,9 @@ class MainPageLocators:
     By.XPATH, "//div[contains(@class, 'Modal_modal__container__Wo2l') and .//h2[contains(text(), 'Детали ингредиента')]]")
     # модальное окно
     INGREDIENT_MODAL_NAME = (By.XPATH, "//p[text()='Краторная булка N-200i']")
+    INGREDIENT_MODAL_CLOSE_BUTTON = (By.CSS_SELECTOR, "button.Modal_modal__close_modified__3V5XS")
+    INGREDIENT_COUNTER = (By.XPATH, "//p[text()='Соус Spicy-X']/ancestor::a//div[contains(@class, 'counter_counter__')]/p")
+    INGREDIENT_SAUCE = (
+    By.XPATH, "//p[@class='BurgerIngredient_ingredient__text__yp3dH' and text()='Соус Spicy-X']/ancestor::a")  # Ингредиент
+    DROP_AREA = (By.CSS_SELECTOR, "ul.BurgerConstructor_basket__list__l9dp_")  # Область сброса
+    CONSTRUCTOR_SAUCE_SPICY = (By.CSS_SELECTOR, "div.constructor-element img[alt='Соус Spicy-X']")

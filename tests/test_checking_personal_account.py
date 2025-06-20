@@ -1,6 +1,5 @@
 import allure
 import pytest
-from data import *
 from locators.recover_password_locators import RecoverLocators
 from locators.main_page_locators import MainPageLocators
 from pages.login_page import LoginPage

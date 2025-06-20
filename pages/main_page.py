@@ -16,9 +16,7 @@ class MainPage(BasePage):
 
         # Для Firefox - специальная обработка с кликом через JavaScript
         if self.driver.name == "firefox":
-            # Находим элемент кнопки
             button = self.wait_for_element_clickable(MainPageLocators.ACCOUNT_BUTTON, timeout=30)
-
             # Прокручиваем к элементу
             self.driver.execute_script(
                 "arguments[0].scrollIntoView({block: 'center', behavior: 'instant'});",
@@ -36,4 +34,35 @@ class MainPage(BasePage):
         self.click_element(MainPageLocators.INGREDIENT_BUN)
         self.element_should_be_present(MainPageLocators.INGREDIENT_DETAILS_MODAL)
         self.element_should_be_present(MainPageLocators.INGREDIENT_MODAL_NAME)
+
+    @allure.step("Получить значение счетчика ингредиента (по умолчанию 0, если не виден)")
+    def get_ingredient_counter_value(self):
+        try:
+            counter = self.get_element_text(MainPageLocators.INGREDIENT_COUNTER)
+            return counter if counter else "0"  # На случай если текст пустой
+        except:
+            # Если элемент не найден или не виден, считаем что значение 0
+            return "0"
+
+    def js_drag_and_drop(self,driver, source, target):
+        driver.execute_script("""
+            function triggerDragAndDrop(selectorDrag, selectorDrop) {
+                var elemDrag = arguments[0], elemDrop = arguments[1];
+                var dataTransfer = new DataTransfer();
+                var fireEvent = function(type, elem) {
+                    var event = new DragEvent(type, {
+                        bubbles: true,
+                        cancelable: true,
+                        dataTransfer: dataTransfer
+                    });
+                    elem.dispatchEvent(event);
+                };
+                fireEvent('dragstart', elemDrag);
+                fireEvent('dragenter', elemDrop);
+                fireEvent('dragover', elemDrop);
+                fireEvent('drop', elemDrop);
+                fireEvent('dragend', elemDrag);
+            }
+            triggerDragAndDrop(arguments[0], arguments[1]);
+        """, source, target)
 
