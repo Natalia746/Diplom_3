@@ -24,7 +24,7 @@ def authorized_user(driver):
     login_page.input_text(RecoverLocators.PASSWORD_INPUT, REGISTERED_PASSWORD)
     login_page.click_element(AccountLocators.SUBMIT_BUTTON)
 
-    main_page.wait_for_element_visible(MainPageLocators.ACCOUNT_BUTTON)
+    main_page.wait_for_element_visible(MainPageLocators.ORDER_BUTTON)
     yield driver
 
 

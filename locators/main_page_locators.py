@@ -17,3 +17,8 @@ class MainPageLocators:
     By.XPATH, "//p[@class='BurgerIngredient_ingredient__text__yp3dH' and text()='Соус Spicy-X']/ancestor::a")  # Ингредиент
     DROP_AREA = (By.CSS_SELECTOR, "ul.BurgerConstructor_basket__list__l9dp_")  # Область сброса
     CONSTRUCTOR_SAUCE_SPICY = (By.CSS_SELECTOR, "div.constructor-element img[alt='Соус Spicy-X']")
+    ORDER_IN_PROGRESS_TEXT = (
+    By.XPATH, "//p[contains(@class, 'text_type_main-small') and contains(text(), 'Ваш заказ начали готовить')]")
+    BUN_IMAGE =(By.XPATH, "//img[@class='constructor-element__image' and @alt='Краторная булка N-200i (верх)']")
+    ORDER_BUTTON = (By.XPATH, "//button[contains(text(), 'Оформить заказ')]")
+    ORDER_CLOSE_BUTTON = (By.CSS_SELECTOR, "button.Modal_modal__close__TnseK")

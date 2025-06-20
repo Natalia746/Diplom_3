@@ -44,25 +44,3 @@ class MainPage(BasePage):
             # Если элемент не найден или не виден, считаем что значение 0
             return "0"
 
-    def js_drag_and_drop(self,driver, source, target):
-        driver.execute_script("""
-            function triggerDragAndDrop(selectorDrag, selectorDrop) {
-                var elemDrag = arguments[0], elemDrop = arguments[1];
-                var dataTransfer = new DataTransfer();
-                var fireEvent = function(type, elem) {
-                    var event = new DragEvent(type, {
-                        bubbles: true,
-                        cancelable: true,
-                        dataTransfer: dataTransfer
-                    });
-                    elem.dispatchEvent(event);
-                };
-                fireEvent('dragstart', elemDrag);
-                fireEvent('dragenter', elemDrop);
-                fireEvent('dragover', elemDrop);
-                fireEvent('drop', elemDrop);
-                fireEvent('dragend', elemDrag);
-            }
-            triggerDragAndDrop(arguments[0], arguments[1]);
-        """, source, target)
-

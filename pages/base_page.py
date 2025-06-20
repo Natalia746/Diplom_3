@@ -6,7 +6,7 @@ from url import *
 from selenium.common.exceptions import TimeoutException
 from locators.recover_password_locators import RecoverLocators
 from selenium.webdriver.common.action_chains import ActionChains
-
+import time
 
 class BasePage:
 
@@ -154,4 +154,82 @@ class BasePage:
     def get_element_text(self, locator, timeout=10):
         element = self.wait_for_element_visible(locator, timeout)
         return element.text
+
+    @allure.step("Перетащить ингредиент {ingredient_locator} в корзину {target_locator}")
+    def drag_ingredient_to_constructor(self, ingredient_locator, target_locator, confirmation_locator=None, timeout=30):
+        """
+        Универсальный метод для перетаскивания ингредиента в конструктор
+        :param ingredient_locator: Локатор перетаскиваемого ингредиента
+        :param target_locator: Локатор целевой области (корзины)
+        :param confirmation_locator: Локатор для подтверждения успешного добавления (опционально)
+        :param timeout: Максимальное время ожидания
+        """
+        if self.driver.name.lower() == "firefox":
+            # Специальная обработка для Firefox
+            source = self.find_element(ingredient_locator)
+            self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", source)
+            time.sleep(1)  # Небольшая пауза для стабилизации
+            target = self.find_element(target_locator)
+            self.js_drag_and_drop(source, target)
+        else:
+            # Стандартное перетаскивание для других браузеров
+            self.drag_and_drop_element(ingredient_locator, target_locator)
+
+        # Ожидание подтверждения добавления, если передан confirmation_locator
+        if confirmation_locator:
+            self.wait_for_element_visible(confirmation_locator, timeout)
+
+    @allure.step("Выполнить JS drag-and-drop")
+    def js_drag_and_drop(self, source, target):
+        """
+        Альтернативная реализация drag-and-drop через JavaScript
+        для браузеров, где стандартный ActionChains не работает
+        """
+        js_script = """
+        function createEvent(typeOfEvent) {
+            var event = document.createEvent("CustomEvent");
+            event.initCustomEvent(typeOfEvent, true, true, null);
+            event.dataTransfer = {
+                data: {},
+                setData: function(key, value) {
+                    this.data[key] = value;
+                },
+                getData: function(key) {
+                    return this.data[key];
+                }
+            };
+            return event;
+        }
+
+        function dispatchEvent(element, event, transferData) {
+            if (transferData) {
+                event.dataTransfer = transferData;
+            }
+            if (element.dispatchEvent) {
+                element.dispatchEvent(event);
+            } else if (element.fireEvent) {
+                element.fireEvent("on" + event.type, event);
+            }
+        }
+
+        function simulateHTML5DragAndDrop(source, target) {
+            var dragStartEvent = createEvent('dragstart');
+            dispatchEvent(source, dragStartEvent);
+
+            var dropEvent = createEvent('drop');
+            dispatchEvent(target, dropEvent, dragStartEvent.dataTransfer);
+
+            var dragEndEvent = createEvent('dragend');
+            dispatchEvent(source, dragEndEvent, dropEvent.dataTransfer);
+        }
+
+        simulateHTML5DragAndDrop(arguments[0], arguments[1]);
+        """
+        self.driver.execute_script(js_script, source, target)
+
+    @allure.step("Проскроллить до элемента: {locator}")
+    def scroll_to_element(self, locator, timeout=10):
+
+        element = self.find_element(locator, timeout)
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center', behavior: 'smooth'});", element)
 

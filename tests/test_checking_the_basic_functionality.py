@@ -79,3 +79,22 @@ class TestBasicFunctionalityUI:
         with allure.step("Проверить увеличение счетчика"):
             updated_counter = main_page.get_ingredient_counter_value()
             assert updated_counter == "1", f"После добавления ингредиента счетчик должен быть 1, а получили {updated_counter}"
+
+    @allure.title("Авторизованный пользователь может успешно оформить заказ")
+    def test_authorized_user_can_make_order(self, driver, authorized_user):
+        main_page = MainPage(driver)
+
+        with allure.step("Перетащить ингредиенты в корзину"):
+            main_page.drag_ingredient_to_constructor(
+            MainPageLocators.INGREDIENT_SAUCE,
+            MainPageLocators.DROP_AREA,
+            MainPageLocators.CONSTRUCTOR_SAUCE_SPICY)
+
+        main_page.drag_ingredient_to_constructor(
+            MainPageLocators.INGREDIENT_BUN,
+            MainPageLocators.DROP_AREA,
+            MainPageLocators.BUN_IMAGE
+        )
+        main_page.click_element(MainPageLocators.ORDER_BUTTON)
+        main_page.wait_for_element_visible(MainPageLocators.ORDER_IN_PROGRESS_TEXT)
+
