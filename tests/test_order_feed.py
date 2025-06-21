@@ -175,7 +175,8 @@ class TestOrderHistory:
         main_page.go_to_order_feed_and_check_header()
         order_feed_page.wait_for_element_visible (OrderFeedPageLocators.STATUS)
 
-        visible_order_number = order_feed_page.get_element_text(OrderFeedPageLocators.STATUS)
+        with allure.step("Получить номер заказа из раздела'В работе'"):
+            visible_order_number = order_feed_page.get_element_text(OrderFeedPageLocators.STATUS)
         assert visible_order_number == order_number
 
 
