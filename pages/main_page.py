@@ -2,6 +2,8 @@ from .base_page import BasePage
 import allure
 from locators.recover_password_locators import RecoverLocators
 from locators.main_page_locators import MainPageLocators
+from locators.order_feed_locators import OrderFeedPageLocators
+from url import *
 
 
 class MainPage(BasePage):
@@ -44,3 +46,11 @@ class MainPage(BasePage):
             # Если элемент не найден или не виден, считаем что значение 0
             return "0"
 
+    @allure.step("Перейти в ленту заказов и проверить заголовок")
+    def go_to_order_feed_and_check_header(self):
+        """Переходит на страницу ленты заказов и проверяет наличие заголовка"""
+        self.go_to_site(ORDER_FEED_PATH)
+        heading_text = self.get_element_text(OrderFeedPageLocators.FEED_HEADING)
+        assert "Лента заказов" in heading_text, (
+            f"Заголовок не содержит 'Лента заказов': {heading_text}"
+        )

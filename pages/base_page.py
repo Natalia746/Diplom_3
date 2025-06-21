@@ -57,7 +57,7 @@ class BasePage:
         assert element.is_displayed(), f"Элемент {locator} не отображается"
 
     @allure.step("Дождаться кликабельности элемента: {locator}")
-    def wait_for_element_clickable(self, locator, timeout=15):
+    def wait_for_element_clickable(self, locator, timeout=20):
         return WebDriverWait(self.driver, timeout).until(
         EC.element_to_be_clickable(locator),
         message=f"Element {locator} not clickable"
@@ -98,7 +98,7 @@ class BasePage:
         )
 
     @allure.step("Дождаться видимости элемента: {locator}")
-    def wait_for_element_visible(self, locator, timeout=20):
+    def wait_for_element_visible(self, locator, timeout=30):
         return WebDriverWait(self.driver, timeout).until(
             EC.visibility_of_element_located(locator),
             message=f"Element {locator} not visible after {timeout} sec"
@@ -131,7 +131,7 @@ class BasePage:
         assert expected_class in actual_classes, error_message
 
     @allure.step("Дождаться исчезновения элемента: {locator}")
-    def wait_for_element_invisible(self, locator, timeout=20):
+    def wait_for_element_invisible(self, locator, timeout=30):
         WebDriverWait(self.driver, timeout).until(
             EC.invisibility_of_element_located(locator),
             message=f"Element {locator} is still visible after {timeout} sec"

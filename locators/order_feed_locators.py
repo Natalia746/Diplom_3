@@ -9,3 +9,6 @@ class OrderFeedPageLocators:
      ORDER_NUMBER_IN_FEED = (By.XPATH, "//p[contains(@class, 'text_type_digits-default')]")
      ORDER_LIST = (By.CSS_SELECTOR, "ul[class*='OrderFeed_orderList']")
      ORDER_NUMBERS = (By.XPATH, "//p[contains(@class, 'text_type_digits-default')]")
+     TOTAL_ORDERS_COUNTER = (By.XPATH, "//p[contains(@class, 'OrderFeed_number') and contains(@class, 'text_type_digits-large')]")
+     ORDERS_COUNTER_TODAY = (By.CSS_SELECTOR, "p.OrderFeed_number__2MbrQ.text.text_type_digits-large")
+     STATUS = (By.CSS_SELECTOR, "li.text.text_type_digits-default.mb-2")

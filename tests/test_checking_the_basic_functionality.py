@@ -69,7 +69,7 @@ class TestBasicFunctionalityUI:
                 driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", source)
                 time.sleep(1)
                 target = main_page.find_element(MainPageLocators.DROP_AREA)
-                main_page.js_drag_and_drop(driver, source, target)
+                main_page.js_drag_and_drop(source, target)
             else:
                 main_page.drag_and_drop_element(
                     MainPageLocators.INGREDIENT_SAUCE,
@@ -81,7 +81,7 @@ class TestBasicFunctionalityUI:
             assert updated_counter == "1", f"После добавления ингредиента счетчик должен быть 1, а получили {updated_counter}"
 
     @allure.title("Авторизованный пользователь может успешно оформить заказ")
-    def test_authorized_user_can_make_order(self, driver, authorized_user):
+    def test_authorized_user_can_make_order(self, driver, registered_and_authorized_user):
         main_page = MainPage(driver)
 
         with allure.step("Перетащить ингредиенты в корзину"):

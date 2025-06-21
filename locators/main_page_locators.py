@@ -22,3 +22,6 @@ class MainPageLocators:
     BUN_IMAGE =(By.XPATH, "//img[@class='constructor-element__image' and @alt='Краторная булка N-200i (верх)']")
     ORDER_BUTTON = (By.XPATH, "//button[contains(text(), 'Оформить заказ')]")
     ORDER_CLOSE_BUTTON = (By.CSS_SELECTOR, "button.Modal_modal__close__TnseK")
+    ORDER_NUMBER_LOCATOR = (By.XPATH, "//h2[contains(@class, 'Modal_modal__title') and contains(@class, 'text_type_digits-large')]")
+    LOADING_ANIMATION = (By.CSS_SELECTOR, "img.Modal_modal__loading__3534A")
+    TICK_ANIMATION_LOCATOR = (By.CSS_SELECTOR, "img.Modal_modal__image__2nh17[alt='tick animation']")
