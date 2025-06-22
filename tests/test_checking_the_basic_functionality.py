@@ -96,4 +96,3 @@ class TestBasicFunctionalityUI:
         )
         main_page.click_element(MainPageLocators.ORDER_BUTTON)
         main_page.wait_for_element_visible(MainPageLocators.ORDER_IN_PROGRESS_TEXT)
-

@@ -25,3 +25,4 @@ class MainPageLocators:
     ORDER_NUMBER_LOCATOR = (By.XPATH, "//h2[contains(@class, 'Modal_modal__title') and contains(@class, 'text_type_digits-large')]")
     LOADING_ANIMATION = (By.CSS_SELECTOR, "img.Modal_modal__loading__3534A")
     TICK_ANIMATION_LOCATOR = (By.CSS_SELECTOR, "img.Modal_modal__image__2nh17[alt='tick animation']")
+

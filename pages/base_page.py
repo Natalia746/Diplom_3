@@ -85,11 +85,6 @@ class BasePage:
         element.clear()
         element.send_keys(text)
 
-    @allure.step("Дождаться изменения URL")
-    def wait_for_url_change(self, original_url, timeout=30):
-        WebDriverWait(self.driver, timeout).until(
-            lambda driver: driver.current_url != original_url
-        )
 
     @allure.step("Дождаться URL: {url}")
     def wait_for_url_to_be(self, url, timeout=10):
@@ -123,25 +118,12 @@ class BasePage:
         else:
             assert "input__placeholder-focused" not in classes, "Поле не должно быть подсвечено"
 
-    @allure.step("Проверить наличие класса у элемента")
-    def element_should_have_class(self, locator, expected_class, timeout=30, message=None):
-        element = self.wait_for_element_visible(locator, timeout)
-        actual_classes = element.get_attribute("class").split()
-        error_message = message or f"Элемент {locator} не содержит класс {expected_class}. Актуальные классы: {actual_classes}"
-        assert expected_class in actual_classes, error_message
 
     @allure.step("Дождаться исчезновения элемента: {locator}")
     def wait_for_element_invisible(self, locator, timeout=30):
         WebDriverWait(self.driver, timeout).until(
             EC.invisibility_of_element_located(locator),
             message=f"Element {locator} is still visible after {timeout} sec"
-        )
-
-    @allure.step("Дождаться текста '{text}' в элементе: {locator}")
-    def wait_for_text_in_element(self, locator, text, timeout=10):
-        WebDriverWait(self.driver, timeout).until(
-            EC.text_to_be_present_in_element(locator, text),
-            message=f"Текст '{text}' не появился в элементе {locator} за {timeout} секунд"
         )
 
     @allure.step("Перетащить элемент в корзину")
@@ -227,9 +209,5 @@ class BasePage:
         """
         self.driver.execute_script(js_script, source, target)
 
-    @allure.step("Проскроллить до элемента: {locator}")
-    def scroll_to_element(self, locator, timeout=10):
 
-        element = self.find_element(locator, timeout)
-        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center', behavior: 'smooth'});", element)
 
