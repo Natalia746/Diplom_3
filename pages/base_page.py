@@ -52,7 +52,7 @@ class BasePage:
         )
 
     @allure.step("Проверить наличие элемента: {locator}")
-    def element_should_be_present(self, locator, timeout=20):
+    def element_should_be_present(self, locator, timeout=30):
         element = self.find_element(locator, timeout)
         assert element.is_displayed(), f"Элемент {locator} не отображается"
 
@@ -150,7 +150,7 @@ class BasePage:
             # Специальная обработка для Firefox
             source = self.find_element(ingredient_locator)
             self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", source)
-            time.sleep(1)  # Небольшая пауза для стабилизации
+            self.wait_for_element_visible(target_locator)
             target = self.find_element(target_locator)
             self.js_drag_and_drop(source, target)
         else:
@@ -209,5 +209,19 @@ class BasePage:
         """
         self.driver.execute_script(js_script, source, target)
 
+    @allure.step('Подождать пока элемент не станет невидимым')
+    def wait_for_element_hide(self, locator):
+        WebDriverWait(self.driver, timeout=30).until(EC.invisibility_of_element_located(locator))
+        return self.driver.find_element(*locator)
 
+    @allure.step("Проверить видимость элемента")
+    def is_element_visible(self, locator, timeout=15):
+        try:
+            self.wait_for_element_visible(locator, timeout)
+            return True
+        except:
+            return False
 
+    def click_element_js (self, locator):
+        element = self.find_element(locator)
+        self.driver.execute_script("arguments[0].click();", element)

@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 
 class MainPageLocators:
     ACCOUNT_BUTTON = (By.XPATH, "//p[text()='Личный Кабинет']")
+    LOGIN_BUTTON = (By.XPATH, "//button[contains(text(), 'Войти в аккаунт')]")
     CONSTRUCTOR_BUTTON = (By.XPATH, "//p[text()='Конструктор']")
     HEADING = (By.XPATH, "//h1[text()='Соберите бургер']")
     ORDER_FEED_BUTTON = (By.XPATH, "//p[text()='Лента Заказов']")
@@ -10,8 +11,13 @@ class MainPageLocators:
     INGREDIENT_DETAILS_MODAL = (
     By.XPATH, "//div[contains(@class, 'Modal_modal__container__Wo2l') and .//h2[contains(text(), 'Детали ингредиента')]]")
     # модальное окно
+    TITLE_MODAL_WINDOW = (By.XPATH, "//h2[contains(@class, 'Modal_modal__title__2L34m') and text()='Детали ингредиента']")
     INGREDIENT_MODAL_NAME = (By.XPATH, "//p[text()='Краторная булка N-200i']")
     INGREDIENT_MODAL_CLOSE_BUTTON = (By.CSS_SELECTOR, "button.Modal_modal__close_modified__3V5XS")
+    INGREDIENT_CALORIES = (By.CSS_SELECTOR, "p.text.text_type_main-default.text_color_inactive")
+    INGREDIENT_FAT = (By.XPATH, "//p[@class='text text_type_main-default text_color_inactive' and text()='24']")
+    INGREDIENT_CARBOHYDRATES = (By.XPATH, "//p[@class='text text_type_main-default text_color_inactive' and text()='80']")
+    INGREDIENT_PROTEINS = (By.CSS_SELECTOR, "p.text.text_type_main-default.text_color_inactive")
     INGREDIENT_COUNTER = (By.XPATH, "//p[text()='Соус Spicy-X']/ancestor::a//div[contains(@class, 'counter_counter__')]/p")
     INGREDIENT_SAUCE = (
     By.XPATH, "//p[@class='BurgerIngredient_ingredient__text__yp3dH' and text()='Соус Spicy-X']/ancestor::a")  # Ингредиент
@@ -25,4 +31,5 @@ class MainPageLocators:
     ORDER_NUMBER_LOCATOR = (By.XPATH, "//h2[contains(@class, 'Modal_modal__title') and contains(@class, 'text_type_digits-large')]")
     LOADING_ANIMATION = (By.CSS_SELECTOR, "img.Modal_modal__loading__3534A")
     TICK_ANIMATION_LOCATOR = (By.CSS_SELECTOR, "img.Modal_modal__image__2nh17[alt='tick animation']")
+    MODAL_CLOSE_BUTTON = (By.CSS_SELECTOR, "button.Modal_modal__close__TnseK")
 

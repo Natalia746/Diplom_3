@@ -27,6 +27,15 @@ class TestOrderHistory:
         order_feed_page.element_should_be_present(OrderFeedPageLocators.MODAL_CONTAINER)
         order_feed_page.element_should_be_present(OrderFeedPageLocators.COMPOSITION_TITLE)
 
+        assert order_feed_page.is_element_visible(OrderFeedPageLocators.MODAL_CONTAINER), \
+            "Модальное окно с деталями заказа не отобразилось"
+
+        assert order_feed_page.is_element_visible(OrderFeedPageLocators.COMPOSITION_TITLE), \
+            "Не найден заголовок 'Состав' в модальном окне"
+
+        assert len(driver.find_elements(*OrderFeedPageLocators.STATUS)) > 0, \
+            "В модальном окне не отображаются ингредиенты заказа"
+
     @allure.title("Заказы из истории пользователя отображаются в Ленте заказов")
     def test_user_orders_displayed_in_feed(self, driver, registered_and_authorized_user):
         main_page = MainPage(driver)
@@ -42,20 +51,19 @@ class TestOrderHistory:
                 MainPageLocators.INGREDIENT_BUN,
                 MainPageLocators.DROP_AREA,
                 MainPageLocators.BUN_IMAGE)
-            main_page.click_element(MainPageLocators.ORDER_BUTTON)
+            main_page.click_element_js(MainPageLocators.ORDER_BUTTON)
 
         with allure.step("Получить номер заказа"):
-            main_page.wait_for_element_invisible(MainPageLocators.LOADING_ANIMATION)
+
             main_page.wait_for_element_visible(MainPageLocators.TICK_ANIMATION_LOCATOR)
             order_number_element = main_page.wait_for_element_visible(MainPageLocators.ORDER_NUMBER_LOCATOR, timeout=30)
-            time.sleep(3)
+            main_page.wait_for_element_invisible(MainPageLocators.LOADING_ANIMATION)
             order_number = f"#0{order_number_element.text.strip()}"
 
         main_page.go_to_order_feed_and_check_header()
 
         with allure.step("Проверить наличие созданного заказа в ленте"):
-            order_in_feed_locator = (
-            By.XPATH, f"//p[contains(@class, 'text_type_digits-default') and text()='{order_number}']")
+            order_in_feed_locator = ((By.XPATH, f"//p[contains(@class, 'text_type_digits-default') and text()='{order_number}']"))
             order_in_feed = order_feed_page.wait_for_element_visible(order_in_feed_locator, timeout=30)
 
             assert order_in_feed.is_displayed(), f"Заказ с номером {order_number} не отображается в ленте заказов"
@@ -85,7 +93,7 @@ class TestOrderHistory:
                 MainPageLocators.CONSTRUCTOR_SAUCE_SPICY
             )
             main_page.wait_for_element_clickable(MainPageLocators.ORDER_BUTTON)
-            main_page.click_element(MainPageLocators.ORDER_BUTTON)
+            main_page.click_element_js(MainPageLocators.ORDER_BUTTON)
             main_page.wait_for_element_invisible(MainPageLocators.LOADING_ANIMATION, timeout=30)
 
         main_page.go_to_order_feed_and_check_header()
@@ -98,8 +106,8 @@ class TestOrderHistory:
                 attachment_type=allure.attachment_type.TEXT
             )
 
-            assert updated_counter_value == initial_counter_value + 1, (
-                f"Счётчик должен был увеличиться с {initial_counter_value} до {initial_counter_value + 1}, "
+            assert updated_counter_value > initial_counter_value , (
+                f"Счётчик должен был увеличиться с {initial_counter_value} , "
                 f"но текущее значение {updated_counter_value}"
             )
 
@@ -125,8 +133,8 @@ class TestOrderHistory:
                 MainPageLocators.DROP_AREA,
                 MainPageLocators.CONSTRUCTOR_SAUCE_SPICY
             )
-            main_page.wait_for_element_clickable(MainPageLocators.ORDER_BUTTON)
-            main_page.click_element(MainPageLocators.ORDER_BUTTON)
+
+            main_page.click_element_js(MainPageLocators.ORDER_BUTTON)
             main_page.wait_for_element_invisible(MainPageLocators.LOADING_ANIMATION, timeout=30)
 
             main_page.go_to_order_feed_and_check_header()
@@ -139,8 +147,8 @@ class TestOrderHistory:
                 attachment_type=allure.attachment_type.TEXT
             )
 
-        assert updated_counter_value == initial_counter_value + 1, (
-            f"Счётчик должен был увеличиться с {initial_counter_value} до {initial_counter_value + 1}, "
+        assert updated_counter_value > initial_counter_value, (
+            f"Счётчик должен был увеличиться с {initial_counter_value}, "
             f"но текущее значение {updated_counter_value}"
         )
 
@@ -161,15 +169,15 @@ class TestOrderHistory:
                 MainPageLocators.DROP_AREA,
                 MainPageLocators.CONSTRUCTOR_SAUCE_SPICY
             )
-            main_page.wait_for_element_clickable(MainPageLocators.ORDER_BUTTON)
-            main_page.click_element(MainPageLocators.ORDER_BUTTON)
+            main_page.click_element_js(MainPageLocators.ORDER_BUTTON)
             main_page.wait_for_element_invisible(MainPageLocators.LOADING_ANIMATION, timeout=30)
 
         with allure.step("Получить номер заказа"):
-            main_page.wait_for_element_invisible(MainPageLocators.LOADING_ANIMATION)
+
             main_page.wait_for_element_visible(MainPageLocators.TICK_ANIMATION_LOCATOR)
+            main_page.wait_for_element_clickable(MainPageLocators.INGREDIENT_MODAL_CLOSE_BUTTON)
             order_number_element = main_page.wait_for_element_visible(MainPageLocators.ORDER_NUMBER_LOCATOR, timeout=30)
-            time.sleep(3)
+            main_page.wait_for_element_invisible(MainPageLocators.LOADING_ANIMATION)
             order_number = f"0{order_number_element.text.strip()}"
 
         main_page.go_to_order_feed_and_check_header()

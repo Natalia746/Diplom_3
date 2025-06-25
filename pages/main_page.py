@@ -54,3 +54,39 @@ class MainPage(BasePage):
         assert "Лента заказов" in heading_text, (
             f"Заголовок не содержит 'Лента заказов': {heading_text}"
         )
+
+    @allure.step("Открыть и проверить модальное окно ингредиента")
+    def open_and_check_ingredient_modal(self):
+        # Кликаем на ингредиент (например, булку)
+        self.click_element(MainPageLocators.INGREDIENT_BUN)
+
+        # Ожидаем появление модального окна
+        self.wait_for_element_visible(MainPageLocators.INGREDIENT_DETAILS_MODAL)
+        self.wait_for_element_visible(MainPageLocators.INGREDIENT_MODAL_NAME)
+
+        # Получаем данные ингредиента
+        name = self.get_ingredient_modal_name()
+        details = {
+            'calories': self.get_ingredient_detail_text(MainPageLocators.INGREDIENT_CALORIES),
+            'proteins': self.get_ingredient_detail_text(MainPageLocators.INGREDIENT_PROTEINS),
+            'fat': self.get_ingredient_detail_text(MainPageLocators.INGREDIENT_FAT),
+            'carbohydrates': self.get_ingredient_detail_text(MainPageLocators.INGREDIENT_CARBOHYDRATES)
+        }
+        return name, details
+
+    @allure.step("Получить название ингредиента в модальном окне")
+    def get_ingredient_modal_name(self):
+        return self.get_element_text(MainPageLocators.INGREDIENT_MODAL_NAME)
+
+    @allure.step("Получить текст деталей ингредиента")
+    def get_ingredient_detail_text(self, locator):
+        return self.get_element_text(locator)
+
+    @allure.step("Проверить видимость модального окна ингредиента")
+    def is_ingredient_modal_visible(self):
+        return self.is_element_visible(MainPageLocators.INGREDIENT_DETAILS_MODAL)
+
+    @allure.step("Закрыть модальное окно ингредиента")
+    def close_ingredient_modal(self):
+        self.click_element(MainPageLocators.MODAL_CLOSE_BUTTON)
+        self.wait_for_element_invisible(MainPageLocators.INGREDIENT_DETAILS_MODAL)
