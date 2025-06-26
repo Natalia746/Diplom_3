@@ -8,6 +8,7 @@ class MainPageLocators:
     ORDER_FEED_BUTTON = (By.XPATH, "//p[text()='Лента Заказов']")
     INGREDIENT_BUN = (
     By.XPATH, "//a[contains(@class, 'BurgerIngredient_ingredient__1TVf6') and .//p[text()='Краторная булка N-200i']]")
+    BUN_COUNTER = (By.XPATH, "//p[text()='Краторная булка N-200i']/ancestor::a//div[contains(@class, 'counter_counter__')]/p")
     INGREDIENT_DETAILS_MODAL = (
     By.XPATH, "//div[contains(@class, 'Modal_modal__container__Wo2l') and .//h2[contains(text(), 'Детали ингредиента')]]")
     # модальное окно

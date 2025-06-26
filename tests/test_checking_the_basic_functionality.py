@@ -44,24 +44,13 @@ class TestBasicFunctionalityUI:
     @allure.title("Отображение модального окна с деталями ингредиента при клике")
     def test_ingredient_details_popup(self, driver):
         main_page = MainPage(driver)
-
-        # Открываем модальное окно и получаем данные ингредиента
         name, details = main_page.open_and_check_ingredient_modal()
-
-        # Проверяем, что название ингредиента в модальном окне соответствует выбранному
         modal_title = main_page.get_ingredient_modal_name()
         assert modal_title == name, \
             f"Название ингредиента в модальном окне '{modal_title}' не соответствует ожидаемому '{name}'"
-        # Проверяем, что отображаются калории
         assert details['calories'] is not None, "Не отображаются калории ингредиента"
-
-        # Проверяем, что отображаются белки
         assert details['proteins'] is not None, "Не отображаются белки ингредиента"
-
-        # Проверяем, что отображаются жиры
         assert details['fat'] is not None, "Не отображаются жиры ингредиента"
-
-        # Проверяем, что отображаются углеводы
         assert details['carbohydrates'] is not None, "Не отображаются углеводы ингредиента"
 
     @allure.title("Закрытие модального окна с деталями ингредиента кликом по крестику")
@@ -74,27 +63,34 @@ class TestBasicFunctionalityUI:
             "Модальное окно с деталями ингредиента осталось видимым после закрытия"
 
     @allure.title("Счетчик ингредиента увеличивается при добавлении в заказ")
-    def test_ingredient_counter_increases_when_added(self, driver):
+    @pytest.mark.parametrize("ingredient_locator,counter_locator,add_count,expected_count,ingredient_name", [
+        (MainPageLocators.INGREDIENT_BUN, MainPageLocators.BUN_COUNTER, 1, "2", "булка"),
+        (MainPageLocators.INGREDIENT_SAUCE, MainPageLocators.INGREDIENT_COUNTER, 3, "3", "соус")
+    ])
+    def test_ingredient_counter_increases_when_added(self, driver, ingredient_locator, counter_locator, add_count,
+                                                     expected_count, ingredient_name):
         main_page = MainPage(driver)
-
-        # Шаг 1: Проверить начальное состояние
-        with allure.step("Проверить начальное состояние"):
-            initial_counter = main_page.get_ingredient_counter_value()
-            assert initial_counter == "0", f"Начальное значение счетчика должно быть 0, а получили {initial_counter}"
-
-        # Шаг 2: Перетащить соус в корзину
-        with allure.step("Перетащить соус в корзину"):
-            main_page.drag_ingredient_to_constructor(
-                ingredient_locator=MainPageLocators.INGREDIENT_SAUCE,
-                target_locator=MainPageLocators.DROP_AREA,
-                confirmation_locator=MainPageLocators.CONSTRUCTOR_SAUCE_SPICY
+        with allure.step(f"Проверить начальное состояние для {ingredient_name}"):
+            initial_counter = main_page.get_ingredient_counter_value(counter_locator)
+            assert initial_counter == "0", (
+                f"Начальное значение счетчика {ingredient_name} должно быть 0, а получили {initial_counter}"
             )
 
-        # Шаг 3: Проверить увеличение счетчика
-        with allure.step("Проверить увеличение счетчика"):
-            updated_counter = main_page.get_ingredient_counter_value()
-            assert updated_counter == "1", f"После добавления ингредиента счетчик должен быть 1, а получили {updated_counter}"
+        with allure.step(f"Перетащить {ingredient_name} в корзину {add_count} раз(а)"):
+            for _ in range(add_count):
+                main_page.drag_ingredient_to_constructor(
+                    ingredient_locator=ingredient_locator,
+                    target_locator=MainPageLocators.DROP_AREA,
+                    confirmation_locator=MainPageLocators.BUN_IMAGE if ingredient_name == "булка"
+                    else MainPageLocators.CONSTRUCTOR_SAUCE_SPICY
+                )
 
+        with allure.step(f"Проверить увеличение счетчика для {ingredient_name}"):
+            updated_counter = main_page.get_ingredient_counter_value(counter_locator)
+            assert updated_counter == expected_count, (
+                f"После добавления {ingredient_name} счетчик должен быть {expected_count}, "
+                f"а получили {updated_counter}"
+            )
     @allure.title("Авторизованный пользователь может успешно оформить заказ")
     def test_authorized_user_can_make_order(self, driver, registered_and_authorized_user):
         main_page = MainPage(driver)

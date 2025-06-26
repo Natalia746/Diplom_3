@@ -1,0 +1,2 @@
+Ожидаемый: https://stellarburgers.nomoreparties.site/feed
+Фактический: https://stellarburgers.nomoreparties.site/feed

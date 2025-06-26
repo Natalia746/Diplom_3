@@ -31,11 +31,11 @@ class TestPasswordRecoveryUI:
 
         registered_email = REGISTERED_EMAIL
         main_page = MainPage(driver, timeout=15)
+        login_page = LoginPage(driver, timeout=15)
 
         main_page.wait_for_element_clickable(MainPageLocators.ACCOUNT_BUTTON)
         main_page.current_url_should_be(BASE_URL)
         main_page.click_element(MainPageLocators.ACCOUNT_BUTTON)
-        login_page = LoginPage(driver, timeout=15)
         login_page.click_restore_password_link()
         password_recovery_page = PasswordRecovery(driver, timeout=5)
         password_recovery_page.current_url_should_be(FORGOT_PASSWORD_URL)
@@ -78,7 +78,7 @@ class TestPasswordRecoveryUI:
         reset_page.click_show_password()
 
         assert reset_page.is_element_visible(RecoverLocators.ILLUMINATED_PASSWORD_FIELD), \
-            "Подсветка поля Пароль не отображается"
+            "Подсветка поля Парольf не отображается"
 
 
 

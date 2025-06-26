@@ -9,7 +9,7 @@ class Account(BasePage):
 
     @allure.step("Клик по кнопке 'Выход'")
     def click_logout_button(self):
-        self.wait_for_overlay_to_disappear(RecoverLocators.OVERLAY_LOCATOR, timeout=45)
+        self.wait_for_overlay_to_disappear(RecoverLocators.OVERLAY_LOCATOR, timeout=30)
         # Для Firefox - специальная обработка с кликом через JavaScript
         if self.driver.name == "firefox":
             self.click_element_js(AccountLocators.LOGOUT_BUTTON)

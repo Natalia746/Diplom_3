@@ -99,16 +99,6 @@ class BasePage:
             message=f"Element {locator} not visible after {timeout} sec"
         )
 
-    @allure.step("Дождаться подсветки поля пароля")
-    def wait_for_password_highlight(self, timeout=10):
-        # Ожидаем появления класса подсветки
-        WebDriverWait(self.driver, timeout).until(
-            lambda d: "input__placeholder-focused" in d.find_element(
-                *RecoverLocators.PASSWORD_LABEL
-            ).get_attribute("class"),
-            message="Подсветка поля пароля не появилась"
-        )
-
     @allure.step("Проверка появления подсветки у поля ввода пароля")
     def check_password_highlight(self, should_be_highlighted=True):
         wrapper = self.find_element(RecoverLocators.PASSWORD_INPUT)
@@ -208,11 +198,6 @@ class BasePage:
         simulateHTML5DragAndDrop(arguments[0], arguments[1]);
         """
         self.driver.execute_script(js_script, source, target)
-
-    @allure.step("Подождать пока элемент не станет невидимым")
-    def wait_for_element_hide(self, locator):
-        WebDriverWait(self.driver, timeout=30).until(EC.invisibility_of_element_located(locator))
-        return self.driver.find_element(*locator)
 
     @allure.step("Проверить видимость элемента")
     def is_element_visible(self, locator, timeout=15):

@@ -38,13 +38,12 @@ class MainPage(BasePage):
         self.element_should_be_present(MainPageLocators.INGREDIENT_MODAL_NAME)
 
     @allure.step("Получить значение счетчика ингредиента (по умолчанию 0, если не виден)")
-    def get_ingredient_counter_value(self):
+    def get_ingredient_counter_value(self, counter_locator):
+        """Получает значение счетчика ингредиента по указанному локатору"""
         try:
-            counter = self.get_element_text(MainPageLocators.INGREDIENT_COUNTER)
-            return counter if counter else "0"  # На случай если текст пустой
+            return self.wait_for_element_visible(counter_locator, timeout=5).text
         except:
-            # Если элемент не найден или не виден, считаем что значение 0
-            return "0"
+            return "0"  # Если счетчик не найден, считаем что значение 0
 
     @allure.step("Перейти в ленту заказов и проверить заголовок")
     def go_to_order_feed_and_check_header(self):

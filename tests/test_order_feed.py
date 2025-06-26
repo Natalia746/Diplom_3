@@ -63,7 +63,7 @@ class TestOrderHistory:
         main_page.go_to_order_feed_and_check_header()
 
         with allure.step("Проверить наличие созданного заказа в ленте"):
-            order_in_feed_locator = ((By.XPATH, f"//p[contains(@class, 'text_type_digits-default') and text()='{order_number}']"))
+            order_in_feed_locator = (By.XPATH, f"//p[contains(@class, 'text_type_digits-default') and text()='{order_number}']")
             order_in_feed = order_feed_page.wait_for_element_visible(order_in_feed_locator, timeout=30)
 
             assert order_in_feed.is_displayed(), f"Заказ с номером {order_number} не отображается в ленте заказов"
@@ -120,7 +120,13 @@ class TestOrderHistory:
         with allure.step("Получить текущее значение счётчика 'Выполнено за сегодня'"):
             main_page.go_to_site(ORDER_FEED_PATH)
             order_feed_page.wait_for_element_visible(OrderFeedPageLocators.ORDERS_COUNTER_TODAY, timeout=20)
+        with allure.step("Проверить увеличение счётчика 'Выполнено за сегодня'"):
             initial_counter_value = int(order_feed_page.get_element_text(OrderFeedPageLocators.ORDERS_COUNTER_TODAY))
+            allure.attach(
+                str(initial_counter_value),
+                name="Initial counter value",
+                attachment_type=allure.attachment_type.TEXT
+            )
         with allure.step("Создать новый заказ"):
             main_page.go_to_site()
             main_page.drag_ingredient_to_constructor(
