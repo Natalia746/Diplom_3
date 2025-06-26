@@ -63,10 +63,8 @@ class TestOrderHistory:
         main_page.go_to_order_feed_and_check_header()
 
         with allure.step("Проверить наличие созданного заказа в ленте"):
-            order_in_feed_locator = (By.XPATH, f"//p[contains(@class, 'text_type_digits-default') and text()='{order_number}']")
-            order_in_feed = order_feed_page.wait_for_element_visible(order_in_feed_locator, timeout=30)
-
-            assert order_in_feed.is_displayed(), f"Заказ с номером {order_number} не отображается в ленте заказов"
+            assert order_feed_page.is_order_displayed(order_number), \
+                f"Заказ с номером {order_number} не отображается в ленте заказов"
 
     @allure.feature('Лента заказов')
     @allure.story('Счётчик выполненных заказов')
@@ -185,12 +183,22 @@ class TestOrderHistory:
             order_number_element = main_page.wait_for_element_visible(MainPageLocators.ORDER_NUMBER_LOCATOR, timeout=30)
             main_page.wait_for_element_invisible(MainPageLocators.LOADING_ANIMATION)
             order_number = f"0{order_number_element.text.strip()}"
+            allure.attach(
+                str(order_number),
+                name="Order_number",
+                attachment_type=allure.attachment_type.TEXT
+            )
 
         main_page.go_to_order_feed_and_check_header()
         order_feed_page.wait_for_element_visible (OrderFeedPageLocators.STATUS)
 
         with allure.step("Получить номер заказа из раздела'В работе'"):
             visible_order_number = order_feed_page.get_element_text(OrderFeedPageLocators.STATUS)
+            allure.attach(
+                str(visible_order_number),
+                name="Visible_order_number",
+                attachment_type=allure.attachment_type.TEXT
+            )
         assert visible_order_number == order_number
 
 

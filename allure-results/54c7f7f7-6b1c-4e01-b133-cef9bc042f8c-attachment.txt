@@ -1,0 +1,2 @@
+Ожидаемый: https://stellarburgers.nomoreparties.site/forgot-password
+Фактический: https://stellarburgers.nomoreparties.site/forgot-password
