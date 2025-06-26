@@ -10,10 +10,6 @@ from selenium.webdriver.support import expected_conditions as EC
 
 class LoginPage(BasePage):
 
-    @allure.step("Перейти на страницу логина")
-    def go_to_login_page(self):
-        self.go_to_site(LOGIN_PAGE)
-
     @allure.step("Нажать ссылку восстановления пароля")
     def click_restore_password_link(self):
         if self.driver.name == "firefox":
@@ -31,6 +27,8 @@ class LoginPage(BasePage):
     @allure.step("Проверить наличие ссылки восстановления")
     def should_be_restore_link(self):
         self.element_should_be_present(RecoverLocators.RESTORE_LINK)
+        assert self.is_element_visible(RecoverLocators.RESTORE_LINK), \
+            "Ссылка восстановления не видна на странице"
 
 
 

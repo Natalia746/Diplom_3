@@ -29,10 +29,9 @@ class TestAccountUI:
 
         account_page = Account(driver, timeout=15)
         account_page.current_url_should_be(ACCOUNT_PAGE)
-        account_page.click_order_history_link()
-
-        account_page.wait_for_url_to_be(ORDER_HISTORY_PAGE)
-        assert driver.current_url == ORDER_HISTORY_PAGE, \
+        account_page.click_element_js(AccountLocators.ORDER_HISTORY_LINK)
+        current_url = account_page.get_current_url()
+        assert current_url == ORDER_HISTORY_PAGE, \
             f"Ожидался URL истории заказов '{ORDER_HISTORY_PAGE}', но получен '{driver.current_url}'"
 
 

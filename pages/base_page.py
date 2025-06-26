@@ -209,7 +209,7 @@ class BasePage:
         """
         self.driver.execute_script(js_script, source, target)
 
-    @allure.step('Подождать пока элемент не станет невидимым')
+    @allure.step("Подождать пока элемент не станет невидимым")
     def wait_for_element_hide(self, locator):
         WebDriverWait(self.driver, timeout=30).until(EC.invisibility_of_element_located(locator))
         return self.driver.find_element(*locator)
@@ -222,6 +222,17 @@ class BasePage:
         except:
             return False
 
+    @allure.step("Клик по кнопке")
     def click_element_js (self, locator):
         element = self.find_element(locator)
         self.driver.execute_script("arguments[0].click();", element)
+
+    @allure.step("Получить текущий URL страницы")
+    def get_current_url(self) -> str:
+        current_url = self.driver.current_url
+        allure.attach(
+            name="Текущий URL",
+            body=current_url,
+            attachment_type=allure.attachment_type.TEXT
+        )
+        return current_url

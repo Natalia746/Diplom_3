@@ -23,6 +23,9 @@ class TestPasswordRecoveryUI:
 
         password_recovery_page.current_url_should_be(FORGOT_PASSWORD_URL)
         password_recovery_page.element_should_be_present(RecoverLocators.RECOVER_BUTTON)
+        assert password_recovery_page.is_element_visible(RecoverLocators.RECOVER_BUTTON), \
+            "Кнопка Восстановить не отображается"
+
     @allure.title("Ввод существующего email для восстановления пароля")
     def test_recover_password_with_registered_email(self, driver):
 
@@ -39,6 +42,9 @@ class TestPasswordRecoveryUI:
         password_recovery_page.input_text(RecoverLocators.EMAIL_INPUT, registered_email)
         password_recovery_page.click_element(RecoverLocators.RECOVER_BUTTON)
         password_recovery_page.wait_for_url_to_be(RESET_PASSWORD_PAGE)
+        current_url = password_recovery_page.get_current_url()
+        assert current_url == RESET_PASSWORD_PAGE, \
+            f"Ожидался URL'{RESET_PASSWORD_PAGE}', но получен '{current_url}'"
 
     @allure.title("Проверка подсветки поля пароля при клике на иконку глаза")
     @pytest.mark.parametrize("password_input", [
@@ -70,7 +76,9 @@ class TestPasswordRecoveryUI:
 
         reset_page.check_password_highlight(should_be_highlighted=False)
         reset_page.click_show_password()
-        reset_page.wait_for_password_highlight()
+
+        assert reset_page.is_element_visible(RecoverLocators.ILLUMINATED_PASSWORD_FIELD), \
+            "Подсветка поля Пароль не отображается"
 
 
 
