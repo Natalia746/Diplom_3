@@ -1,0 +1,2 @@
+Ожидаемый: https://stellarburgers.nomoreparties.site/login
+Фактический: https://stellarburgers.nomoreparties.site/login
